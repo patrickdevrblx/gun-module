@@ -171,7 +171,7 @@ function GunHandler:_getDamage(target: Part)
 end
 
 function GunHandler:_createBeam(cFrame: CFrame, Size: Vector3) : () -- create the visual beam
-	local beam = Instance.new("Part", workspace)
+	local beam = Instance.new("Part", workspace) -- create a new part inside the workspace
 	beam.Anchored = true
 	beam.CanCollide = false
 	beam.CFrame = cFrame
