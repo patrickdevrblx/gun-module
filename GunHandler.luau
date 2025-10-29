@@ -176,7 +176,7 @@ function GunHandler:_createBeam(cFrame: CFrame, Size: Vector3) : () -- create th
 	beam.CanCollide = false
 	beam.CFrame = cFrame
 	beam.Size = Size
-	beam.BrickColor = BrickColor.new("New Yeller")
+	beam.BrickColor = Color3.fromRGB(255, 255, 0)
 	beam.Material = Enum.Material.Neon
 
 	game:GetService("Debris"):AddItem(beam, .1) -- delete the beam after 0.1 seconds
