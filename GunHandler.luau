@@ -29,6 +29,7 @@ export type GunInstance = { -- store function signatures and class attributes fo
 	_getSpreadAngle: (self: GunInstance) -> CFrame,
 	_getDamageMultiplier: (self: GunInstance) -> (),
 	_getDamage: (self: GunInstance) -> (),
+	delete: (self: GunInstance) -> (),
 
 	Ammo: number,
 	MagSize: number,
@@ -71,27 +72,27 @@ local TARGET_CLASSES = { -- a table to classify each instance for convenience an
 		["RightUpperLeg"] = true,
 		["RightLowerLeg"] = true
 	},
-	
+
 	["Arm"] = {
 		["Left arm"] = true,
 		["Right arm"] = true,
-		
+
 		["LeftUpperArm"] = true,
 		["LeftLowerArm"] = true,
 		["RightUpperArm"] = true,
 		["RightLowerArm"] = true
 	},
-	
+
 	["Leg"] = {
 		["Left leg"] = true,
 		["Right leg"] = true,
-		
+
 		["LeftUpperLeg"] = true,
 		["LeftLowerLeg"] = true,
 		["RightUpperLeg"] = true,
 		["RightLowerLeg"] = true
 	},
-	
+
 	["Torso"] = {
 		["Torso"] = true,
 		["UpperTorso"] = true,
@@ -127,7 +128,7 @@ function GunHandler.new(Config) : GunInstance -- function to create a new gun in
 	self.Safety = false -- a flag to check if the gun safety is enabled
 	self.Cooling = false -- a flag to check if the gun is currently cooling
 	self.LastFire = 0 -- a float used to store the last time the gun was fired to check if the gun can fire based on the fire rate
-	
+
 	table.insert(GunInstances, self) -- store the new gun object insde gun instances to apply the gun cooling loop
 
 	return self :: GunInstance -- cast self to GunInstance to apply all the type annotations
@@ -146,9 +147,9 @@ end
 
 function GunHandler:_getDamageMultiplier(target: Part) -- function to get the damage multiplier based on the target, used by the _getDamage function
 	local DamageMultipliers = self.Config.DAMAGE_MULTIPLIERS
-	
+
 	local multiplier -- initialise the multiplier to use as a temporary variable and return it if it contains a valid value
-	
+
 	for class, names in pairs(TARGET_CLASSES) do
 		if names[target.Name] then -- check if the target name is part of the current class
 			multiplier = DamageMultipliers[class] -- attempt to set the multiplier
@@ -157,12 +158,12 @@ function GunHandler:_getDamageMultiplier(target: Part) -- function to get the da
 			end
 		end
 	end
-	
+
 	multiplier = DamageMultipliers[target.Name] -- check if the target name is specified directly in the damage multipliers
 	if multiplier then
 		return multiplier
 	end
-	
+
 	return 1 -- return 1 if no multiplier was found
 end
 
@@ -184,7 +185,7 @@ end
 
 function GunHandler:_getSpreadAngle(): CFrame -- generate a random spread angle
 	local Spread = self.Config.SPREAD
-	
+
 	local AngleX = GenerateRandomAngle(Spread) -- generate 2 random angles within -Spread and +Spread in radians
 	local AngleY = GenerateRandomAngle(Spread)
 
@@ -193,7 +194,7 @@ end
 
 function GunHandler:_addHeat() : () -- function to add heat to the gun and prevent firing when the heat goes above its maximum	
 	self.Heat += 1
-	
+
 	if self.Heat > self.Config.MAX_HEAT and not self.Cooling then
 		self.Cooling = true
 		print("Waiting for gun to cool down..") -- print a message for debugging
@@ -212,7 +213,7 @@ function GunHandler:Fire(Origin: Vector3, Direction: Vector3, ExcludeInstances: 
 		warn(info) -- warn the debugging message if canFire is false
 		return
 	end
-	
+
 	self.CanFire = false -- flag to make sure other bullets cant fire until the current function has ended
 
 	ExcludeInstances = ExcludeInstances or {} -- create a new table if ExcludeInstances is missing
