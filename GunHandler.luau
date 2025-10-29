@@ -147,23 +147,23 @@ end
 function GunHandler:_getDamageMultiplier(target: Part) -- function to get the damage multiplier based on the target, used by the _getDamage function
 	local DamageMultipliers = self.Config.DAMAGE_MULTIPLIERS
 	
-	local multiplier
+	local multiplier -- initialise the multiplier to use as a temporary variable and return it if it contains a valid value
 	
 	for class, names in pairs(TARGET_CLASSES) do
-		if names[target.Name] then
-			multiplier = DamageMultipliers[class]
+		if names[target.Name] then -- check if the target name is part of the current class
+			multiplier = DamageMultipliers[class] -- attempt to set the multiplier
 			if multiplier then
-				return multiplier
+				return multiplier -- if the multiplier exists, return it
 			end
 		end
 	end
 	
-	multiplier = DamageMultipliers[target.Name]
+	multiplier = DamageMultipliers[target.Name] -- check if the target name is specified directly in the damage multipliers
 	if multiplier then
 		return multiplier
 	end
 	
-	return 1 -- return 1 if no multiplier is found
+	return 1 -- return 1 if no multiplier was found
 end
 
 function GunHandler:_getDamage(target: Part)
