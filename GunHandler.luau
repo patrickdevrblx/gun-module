@@ -18,7 +18,7 @@ type GunConfig = {
 	MAX_HEAT: number, -- the maximum heat the gun can reach before not being able to fire
 	COOLING_RATE: number, -- the temperature of the gun lost per second
 	AUTOMATIC: boolean, -- a flag used on the client side to determine if the firing is manual or automatic
-	DAMAGE_MULTIPLIERS: {[string]: number}? -- damage mutlipliers is optional, the default is handled inside the new method so that the same table is not referenced
+	DAMAGE_MULTIPLIERS: {[string]: number}? -- damage mutlipliers is optional, the default is handled inside the new method so that the same table is not referenced multiple times
 }
 
 export type GunInstance = { -- store function signatures and class attributes for easier debugging
